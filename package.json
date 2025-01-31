@@ -1,0 +1,67 @@
+{
+    "name": "moon-widget",
+    "version": "0.1.0",
+    "description": "React component for displaying moon phases",
+    "main": "dist/index.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "packageManager": "yarn@4.5.0",
+    "keywords": [
+        "react",
+        "moon",
+        "widget",
+        "astronomy"
+    ],
+    "author": "Misha Topchilo <20854498+miksrv@users.noreply.github.com>",
+    "license": "MIT",
+    "peerDependencies": {
+        "react": ">=17.0.0",
+        "react-dom": ">=17.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/miksrv/moon-widget.git"
+    },
+    "dependencies": {
+        "cra-template-typescript": "1.2.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-scripts": "5.0.1",
+        "suncalc": "^1.9.0"
+    },
+    "devDependencies": {
+        "@types/prop-types": "^15.7.14",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "tsup": "^8.3.6",
+        "typescript": "^5.7.3"
+    },
+    "scripts": {
+        "build": "tsup src/index.tsx --dts --format esm,cjs --out-dir dist",
+        "prepare": "npm run build",
+        "start": "react-scripts start",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}

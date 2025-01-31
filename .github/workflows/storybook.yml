@@ -1,0 +1,36 @@
+name: Deploy Storybook
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'storybook/**'
+
+jobs:
+    build-storybook:
+        runs-on: ubuntu-latest
+        name: Build and Deploy Storybook
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'npm'
+
+            - name: Install dependencies for Storybook
+              working-directory: storybook
+              run: npm install
+
+            - name: Build Storybook
+              working-directory: storybook
+              run: npm run build-storybook
+
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: storybook/storybook-static
