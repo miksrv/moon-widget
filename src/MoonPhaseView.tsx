@@ -25,12 +25,15 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             // Отображаем Луну
             ctx.drawImage(img, 0, 0, img.width, img.height);
 
-            // Если полнолуние (0.5) — тени нет
-            if (phase === 0.5) return;
+            // Преобразуем фазу Луны к правильному диапазону
+            const adjustedPhase = Math.abs(phase - 0.5); // 0 -> 0.5 (новолуние), 0.5 -> 0 (полнолуние), 1 -> 0.5 (новолуние)
 
-            // Если новолуние (0 или 1) — Луна полностью затемнена
+            // Если полнолуние (adjustedPhase = 0) — тени нет
+            if (adjustedPhase === 0) return;
+
+            // Если новолуние (adjustedPhase = 0.5) — Луна полностью затемнена
             ctx.globalCompositeOperation = "source-atop";
-            if (phase === 0 || phase === 1) {
+            if (adjustedPhase === 0.5) {
                 ctx.fillStyle = `rgba(0, 0, 0, ${shadowIntensity})`;
                 ctx.fillRect(0, 0, img.width, img.height);
                 ctx.globalCompositeOperation = "source-over";
@@ -47,7 +50,7 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             let transitionStart, transitionEnd;
 
             if (phase < 0.5) {
-                // Луна "растет" (тень уходит слева направо)
+                // Растущая Луна (тень уходит справа налево)
                 const visibleFraction = phase * 2; // От 0 (новолуние) до 1 (полнолуние)
                 transitionStart = Math.max(0, 1 - visibleFraction - shadowSpread);
                 transitionEnd = Math.min(1, 1 - visibleFraction + shadowSpread);
@@ -57,10 +60,10 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
                 gradient.addColorStop(transitionEnd, lightShadow);
                 gradient.addColorStop(1, lightShadow);
             } else {
-                // Луна "убывает" (тень появляется справа налево)
-                const shadowFraction = (phase - 0.5) * 2; // От 0 (полнолуние) до 1 (новолуние)
-                transitionStart = Math.max(0, 1 - shadowFraction - shadowSpread);
-                transitionEnd = Math.min(1, 1 - shadowFraction + shadowSpread);
+                // Убывающая Луна (тень появляется справа налево)
+                const shadowFraction = (1 - phase) * 2; // Инвертируем фазу, чтобы тень увеличивалась с правого края
+                transitionStart = Math.max(0, shadowFraction - shadowSpread);
+                transitionEnd = Math.min(1, shadowFraction + shadowSpread);
 
                 gradient.addColorStop(0, lightShadow);
                 gradient.addColorStop(transitionStart, lightShadow);
