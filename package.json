@@ -26,7 +26,6 @@
         "url": "https://github.com/miksrv/moon-widget.git"
     },
     "dependencies": {
-        "cra-template-typescript": "1.2.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-scripts": "5.0.1",
@@ -45,6 +44,7 @@
         "eslint-plugin-jest": "^28.11.0",
         "eslint-plugin-react": "^7.37.4",
         "eslint-plugin-simple-import-sort": "^12.1.1",
+        "prettier": "^3.4.2",
         "sass": "^1.83.4",
         "sass-loader": "^16.0.4",
         "tsup": "^8.3.6",
@@ -54,7 +54,6 @@
     "scripts": {
         "build": "tsup src/index.tsx --dts --format esm,cjs --out-dir dist",
         "prepare": "npm run build",
-        "start": "react-scripts start",
         "test": "jest",
         "test:coverage": "jest --coverage",
         "test:watch": "jest --watch --testNamePattern",

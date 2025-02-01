@@ -1,14 +1,14 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SunCalc from 'suncalc'
 
 import MoonPhaseView from './MoonPhaseView'
 // import styles from './styles.module.sass'
 
-interface MoonWidgetProps {
-    lat: number;
-    lon: number;
-    date?: string;
-    timezone?: string;
+export interface MoonWidgetProps {
+    lat: number
+    lon: number
+    date?: string
+    timezone?: string
 }
 
 const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => {
@@ -93,10 +93,11 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => 
 
     return (
         <div style={{ border: '1px solid #ccc', padding: '10px', width: '300px' }}>
-
-            <MoonPhaseView phase={moonPhase}
-shadowIntensity={1.5}
-shadowSpread={0.2} />
+            <MoonPhaseView
+                phase={moonPhase}
+                shadowIntensity={1.5}
+                shadowSpread={0.2}
+            />
 
             <p>DATE: {currentDate?.toISOString()}</p>
             <p>Current Moon Phase: {getPhaseName(moonPhase)}</p>
@@ -106,8 +107,12 @@ shadowSpread={0.2} />
             <p>Illumination: {Math.round(moonData.illumination * 100)}%</p>
             <p>Moon Rise: {moonData.moonrise}</p>
             <p>Moon Set: {moonData.moonset}</p>
-            <p>RA/Dec: {moonData.ra} {moonData.dec}</p>
-            <p>Az/Alt: {moonData.az} {moonData.alt}</p>
+            <p>
+                RA/Dec: {moonData.ra} {moonData.dec}
+            </p>
+            <p>
+                Az/Alt: {moonData.az} {moonData.alt}
+            </p>
             <p>Next New Moon: {moonData.nextNewMoon}</p>
             <p>Next Full Moon: {moonData.nextFullMoon}</p>
             <p>First Quarter: {moonData.nextFirstQuarter}</p>
@@ -123,16 +128,18 @@ shadowSpread={0.2} />
 function formatTime(date: Date | null, timezone?: string): string {
     return date
         ? new Intl.DateTimeFormat('en-GB', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZone: timezone || 'UTC'
-        }).format(date)
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              timeZone: timezone || 'UTC'
+          }).format(date)
         : 'No event'
 }
 
 function toHMS(degrees: number): string {
-    if (isNaN(degrees)) {return 'Unknown'}
+    if (isNaN(degrees)) {
+        return 'Unknown'
+    }
     const hours = Math.floor(degrees / 15)
     const minutes = Math.floor((degrees % 15) * 4)
     const seconds = ((degrees % 15) * 240) % 60
@@ -140,7 +147,9 @@ function toHMS(degrees: number): string {
 }
 
 function toDMS(degrees: number): string {
-    if (isNaN(degrees)) {return 'Unknown'}
+    if (isNaN(degrees)) {
+        return 'Unknown'
+    }
     const d = Math.floor(degrees)
     const m = Math.floor((degrees - d) * 60)
     const s = ((degrees - d) * 3600) % 60
@@ -148,14 +157,30 @@ function toDMS(degrees: number): string {
 }
 
 function getPhaseName(fraction: number): string {
-    if (fraction < 0.03) {return 'New Moon'}
-    if (fraction < 0.22) {return 'Waxing Crescent'}
-    if (fraction < 0.28) {return 'First Quarter'}
-    if (fraction < 0.47) {return 'Waxing Gibbous'}
-    if (fraction < 0.53) {return 'Full Moon'}
-    if (fraction < 0.72) {return 'Waning Gibbous'}
-    if (fraction < 0.78) {return 'Last Quarter'}
-    if (fraction < 0.97) {return 'Waning Crescent'}
+    if (fraction < 0.03) {
+        return 'New Moon'
+    }
+    if (fraction < 0.22) {
+        return 'Waxing Crescent'
+    }
+    if (fraction < 0.28) {
+        return 'First Quarter'
+    }
+    if (fraction < 0.47) {
+        return 'Waxing Gibbous'
+    }
+    if (fraction < 0.53) {
+        return 'Full Moon'
+    }
+    if (fraction < 0.72) {
+        return 'Waning Gibbous'
+    }
+    if (fraction < 0.78) {
+        return 'Last Quarter'
+    }
+    if (fraction < 0.97) {
+        return 'Waning Crescent'
+    }
     return 'New Moon'
 }
 

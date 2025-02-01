@@ -10,14 +10,14 @@ export const forceNumber = (n: unknown): number => {
  * Convert degrees to radians.
  */
 export const degToRad = (degrees: number): number => {
-    return degrees * Math.PI / 180
+    return (degrees * Math.PI) / 180
 }
 
 /**
  * Convert radians to degrees.
  */
 export const radToDeg = (radians: number): number => {
-    return radians * 180 / Math.PI
+    return (radians * 180) / Math.PI
 }
 
 /**
@@ -96,7 +96,6 @@ export const formatInterval = (i: number): string => {
 
     if (quotient) {
         return `${quotient} day${quotientPlural}, ${remainder} hour${remainderPlural}`
-    } 
-        return `${remainder} hour${remainderPlural}`
-    
+    }
+    return `${remainder} hour${remainderPlural}`
 }

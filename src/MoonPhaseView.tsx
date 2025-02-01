@@ -3,9 +3,9 @@ import React, { useEffect, useRef } from 'react'
 import imageSrc from './moon.png'
 
 interface MoonPhaseImageProps {
-    phase: number; // 0 (новолуние) → 1 (новолуние), 0.5 - полнолуние
-    shadowIntensity?: number; // Интенсивность тени (0.0 - 1.0)
-    shadowSpread?: number; // Размытие границы тени (0.0 - 1.0)
+    phase: number // 0 (новолуние) → 1 (новолуние), 0.5 - полнолуние
+    shadowIntensity?: number // Интенсивность тени (0.0 - 1.0)
+    shadowSpread?: number // Размытие границы тени (0.0 - 1.0)
 }
 
 const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity = 0.8, shadowSpread = 0.3 }) => {
@@ -13,9 +13,13 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
 
     useEffect(() => {
         const canvas = canvasRef.current
-        if (!canvas) {return}
+        if (!canvas) {
+            return
+        }
         const ctx = canvas.getContext('2d')
-        if (!ctx) {return}
+        if (!ctx) {
+            return
+        }
 
         const img = new Image()
         img.src = imageSrc
@@ -30,7 +34,9 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             const adjustedPhase = Math.abs(phase - 0.5) // 0 -> 0.5 (новолуние), 0.5 -> 0 (полнолуние), 1 -> 0.5 (новолуние)
 
             // Если полнолуние (adjustedPhase = 0) — тени нет
-            if (adjustedPhase === 0) {return}
+            if (adjustedPhase === 0) {
+                return
+            }
 
             // Если новолуние (adjustedPhase = 0.5) — Луна полностью затемнена
             ctx.globalCompositeOperation = 'source-atop'
@@ -48,7 +54,8 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             const midShadow = `rgba(0, 0, 0, ${shadowIntensity * 0.6})` // Средняя тень
             const lightShadow = 'rgba(0, 0, 0, 0)' // Плавный переход
 
-            let transitionStart; let transitionEnd
+            let transitionStart
+            let transitionEnd
 
             if (phase < 0.5) {
                 // Растущая Луна (тень уходит справа налево)

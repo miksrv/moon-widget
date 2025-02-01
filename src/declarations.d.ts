@@ -1,16 +1,16 @@
 declare module 'suncalc'
 
 declare module '*.png' {
-    const content: string;
-    export default content;
+    const content: string
+    export default content
 }
 
-declare module "*.scss" {
-    const content: { [className: string]: string };
-    export default content;
+declare module '*.scss' {
+    const content: { [className: string]: string }
+    export default content
 }
 
-declare module "*.sass" {
-    const content: { [className: string]: string };
-    export default content;
+declare module '*.sass' {
+    const content: { [className: string]: string }
+    export default content
 }

@@ -6,6 +6,8 @@
 .yarn/
 .pnp.js
 
+/storybook/node_modules
+
 # testing
 /coverage
 
