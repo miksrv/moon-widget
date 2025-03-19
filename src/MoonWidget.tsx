@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SunCalc from 'suncalc'
 
-import MoonPhaseImage from './MoonPhaseView'
+import MoonImage from './components/MoonImage/MoonImage'
 import styles from './styles.module.sass'
 
 export interface MoonWidgetProps {
@@ -129,11 +129,9 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
         <div className={cn(styles.moonWidget, styles[variant])}>
             <div className={styles.moon}>
                 <div className={styles.moonPhase}>{getPhaseName(moonPhase)}</div>
-                <MoonPhaseImage
-                    phase={.1}
-                    shadowIntensity={1.5}
-                    shadowSpread={0.2}
-                />
+                <MoonImage illuminationPhase={moonData.illumination}
+zenithAngle={moonData.altitude}
+parallacticAngle={moonData.parallacticAngle} />
                 <div className={styles.date}>{formatDate(currentDate)}</div>
             </div>
 

@@ -3,12 +3,13 @@ import React, { useEffect, useRef } from 'react'
 import imageSrc from './moon.png'
 
 interface MoonPhaseImageProps {
-    phase: number // 0 (новолуние) → 1 (новолуние), 0.5 - полнолуние
+    phase: number // 0 (новолуние) → 1 (полнолуние)
     shadowIntensity?: number // Интенсивность тени (0.0 - 1.0)
     shadowSpread?: number // Размытие границы тени (0.0 - 1.0)
+    isWaxing: boolean // true - растущая Луна, false - убывающая Луна
 }
 
-const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity = 0.8, shadowSpread = 0.3 }) => {
+const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity = 0.8, shadowSpread = 0.3, isWaxing }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
@@ -57,7 +58,7 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             let transitionStart
             let transitionEnd
 
-            if (phase < 0.5) {
+            if (isWaxing) {
                 // Растущая Луна (тень уходит справа налево)
                 const visibleFraction = phase * 2 // От 0 (новолуние) до 1 (полнолуние)
                 transitionStart = Math.max(0, 1 - visibleFraction - shadowSpread)
@@ -68,8 +69,8 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
                 gradient.addColorStop(transitionEnd, lightShadow)
                 gradient.addColorStop(1, lightShadow)
             } else {
-                // Убывающая Луна (тень появляется справа налево)
-                const shadowFraction = (1 - phase) * 2 // Инвертируем фазу, чтобы тень увеличивалась с правого края
+                // Убывающая Луна (тень появляется слева направо)
+                const shadowFraction = (1 - phase) * 2 // Инвертируем фазу, чтобы тень увеличивалась с левого края
                 transitionStart = Math.max(0, shadowFraction - shadowSpread)
                 transitionEnd = Math.min(1, shadowFraction + shadowSpread)
 
@@ -83,7 +84,7 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             ctx.fillRect(0, 0, img.width, img.height)
             ctx.globalCompositeOperation = 'source-over'
         }
-    }, [phase, shadowIntensity, shadowSpread])
+    }, [phase, shadowIntensity, shadowSpread, isWaxing])
 
     return <canvas ref={canvasRef} />
 }

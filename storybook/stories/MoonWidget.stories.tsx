@@ -35,18 +35,18 @@ const Template: StoryFn<MoonWidgetProps> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-    lat: 51.5074,
-    lon: -0.1278,
+    lat: 37.695637,
+    lon: -121.9214582,
     date: new Date().toISOString(),
-    timezone: 'UTC',
+    // timezone: 'UTC',
     language: 'ru',
     variant: 'horizontal'
 }
 
 export const CustomDate = Template.bind({})
 CustomDate.args = {
-    lat: 51.5074,
-    lon: -0.1278,
+    lat: 37.695637,
+    lon: -121.9214582,
     date: '2023-12-25T00:00:00Z',
     timezone: 'UTC',
     language: 'en',
