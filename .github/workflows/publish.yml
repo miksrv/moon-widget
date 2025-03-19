@@ -1,47 +1,47 @@
-name: Release package
-
-on:
-    push:
-        branches:
-            - main
-        paths:
-            - 'CHANGELOG.md'
-
-jobs:
-    release:
-        name: Release
-        runs-on: ubuntu-latest
-
-        permissions:
-            contents: write
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: 'npm'
-
-            - name: Install dependencies
-              run: yarn workspaces focus
-
-            - name: Build package
-              run: yarn prepare
-
-            - name: Create .npmrc
-              run: |
-                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-                  echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-                  echo "@miksrv:registry=https://npm.pkg.github.com/" >> ~/.npmrc
-
-            - name: Create Release and Publish to npm
-              id: changesets
-              uses: changesets/action@v1
-              with:
-                  publish: yarn release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#name: Release package
+#
+#on:
+#    push:
+#        branches:
+#            - main
+#        paths:
+#            - 'CHANGELOG.md'
+#
+#jobs:
+#    release:
+#        name: Release
+#        runs-on: ubuntu-latest
+#
+#        permissions:
+#            contents: write
+#
+#        steps:
+#            - name: Checkout code
+#              uses: actions/checkout@v4
+#
+#            - name: Setup Node.js
+#              uses: actions/setup-node@v4
+#              with:
+#                  node-version: 20
+#                  cache: 'npm'
+#
+#            - name: Install dependencies
+#              run: yarn workspaces focus
+#
+#            - name: Build package
+#              run: yarn prepare
+#
+#            - name: Create .npmrc
+#              run: |
+#                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+#                  echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+#                  echo "@miksrv:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+#
+#            - name: Create Release and Publish to npm
+#              id: changesets
+#              uses: changesets/action@v1
+#              with:
+#                  publish: yarn release
+#              env:
+#                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
