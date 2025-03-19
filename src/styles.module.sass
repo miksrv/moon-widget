@@ -1,0 +1,58 @@
+@import "dark.css"
+
+.moonWidget
+    font-size: var(--font-size)
+    font-family: var(--font-family), sans-serif
+    border-radius: var(--border-radius)
+    box-shadow: var(--container-shadow)
+    background-color: var(--container-background-color)
+    color: var(--text-color-primary)
+    width: auto
+    height: auto
+    padding: 15px
+    display: flex
+    gap: 20px
+
+    .moon
+        display: flex
+        flex-direction: column
+
+        .moonPhase
+            text-align: center
+            font-size: calc(var(--font-size) * 1.5)
+            margin-bottom: 10px
+
+        .date
+            color: var(--text-color-secondary)
+            text-align: center
+            margin-top: 10px
+
+    &.vertical
+        flex-direction: column
+
+        .information
+            margin-top: 15px
+
+    &.horizontal
+        flex-direction: row
+        justify-content: space-between
+
+    .information
+        overflow: hidden
+
+        .property
+            display: flex
+            justify-content: flex-start
+            align-items: center
+            margin-bottom: 10px
+            white-space: nowrap
+
+            &:last-of-type
+                margin-bottom: 0
+
+            .key
+                width: 50%
+                min-width: 180px
+                color: var(--text-color-secondary)
+                overflow: hidden
+                text-overflow: ellipsis
