@@ -1,18 +1,57 @@
 import React, { useEffect, useState } from 'react'
 import SunCalc from 'suncalc'
 
-import MoonPhaseView from './MoonPhaseView'
-// import styles from './styles.module.sass'
+import MoonPhaseImage from './MoonPhaseView'
+import styles from './styles.module.sass'
 
 export interface MoonWidgetProps {
     lat: number
     lon: number
     date?: string
     timezone?: string
+    language?: 'en' | 'ru'
+    variant?: 'vertical' | 'horizontal'
 }
 
-const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => {
-    const [currentDate, setCurrentDate] = useState(new Date(date || ''))
+const translations = {
+    en: {
+        moonAge: 'Age',
+        distanceToMoon: 'Distance',
+        illumination: 'Illumination',
+        moonRise: 'Moon Rise',
+        moonSet: 'Moon Set',
+        raDec: 'RA/Dec',
+        azAlt: 'Az/Alt',
+        nextNewMoon: 'Next New Moon',
+        nextFullMoon: 'Next Full Moon',
+        firstQuarter: 'First Quarter',
+        lastQuarter: 'Last Quarter',
+        moonAltitude: 'Moon Altitude',
+        moonAzimuth: 'Moon Azimuth',
+        parallacticAngle: 'Parallactic Angle',
+        nextMoonHigh: 'Next Moon High'
+    },
+    ru: {
+        moonAge: 'Возраст',
+        distanceToMoon: 'Расстояние',
+        illumination: 'Освещенность',
+        moonRise: 'Восход',
+        moonSet: 'Закат',
+        raDec: 'RA/Dec',
+        azAlt: 'Аз/Альт',
+        nextNewMoon: 'Следующее новолуние',
+        nextFullMoon: 'Следующее полнолуние',
+        firstQuarter: 'Первая четверть',
+        lastQuarter: 'Последняя четверть',
+        moonAltitude: 'Высота',
+        moonAzimuth: 'Азимут',
+        parallacticAngle: 'Параллактический угол',
+        nextMoonHigh: 'Следующий максимум'
+    }
+}
+
+const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, language = 'en', variant = 'vertical' }) => {
+    const [currentDate, setCurrentDate] = useState(() => (date ? new Date(date) : new Date()))
     const [moonPhase, setMoonPhase] = useState(0)
     const [moonData, setMoonData] = useState({
         age: 0,
@@ -34,11 +73,11 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => 
         nextMoonHigh: 'Unknown'
     })
 
+    const t = translations[language]
+
     useEffect(() => {
         if (!date) {
-            const interval = setInterval(() => {
-                setCurrentDate(new Date())
-            }, 1000)
+            const interval = setInterval(() => setCurrentDate(new Date()), 1000)
             return () => clearInterval(interval)
         }
     }, [date])
@@ -49,27 +88,22 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => 
         const moonPosition = SunCalc.getMoonPosition(selectedDate, lat, lon)
         const moonTimes = SunCalc.getMoonTimes(selectedDate, lat, lon)
 
-        setMoonPhase(moonIllumination.phase)
-
         const lunarCycle = 29.53
         const moonAge = moonIllumination.phase * lunarCycle
         const distanceToMoon = 384400 * (1 - moonIllumination.fraction * 0.05)
 
-        function findNextMoonPhase(targetPhase: number): string {
-            let days = 0
+        const findNextMoonPhase = (targetPhase: number): string => {
             const testDate = new Date(selectedDate)
-
-            while (days < 30) {
+            for (let days = 0; days < 30; days++) {
                 testDate.setDate(testDate.getDate() + 1)
-                const testPhase = SunCalc.getMoonIllumination(testDate).phase
-                if (Math.abs(Number(testPhase.toFixed(3)) - targetPhase) <= 0.035) {
+                if (Math.abs(SunCalc.getMoonIllumination(testDate).phase - targetPhase) <= 0.035) {
                     return testDate.toISOString().split('T')[0]
                 }
-                days++
             }
             return 'Unknown'
         }
 
+        setMoonPhase(moonIllumination.phase)
         setMoonData({
             age: moonAge,
             distance: distanceToMoon,
@@ -82,48 +116,98 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone }) => 
             nextLastQuarter: findNextMoonPhase(0.75),
             altitude: moonPosition.altitude,
             azimuth: moonPosition.azimuth,
-            ra: moonData.azimuth ? toHMS((moonData.azimuth * 180) / 15) : 'Unknown',
-            dec: moonData.altitude ? toDMS(moonData.altitude * (180 / Math.PI)) : 'Unknown',
-            az: toDMS((moonData.azimuth * 180) / Math.PI),
-            alt: toDMS((moonData.altitude * 180) / Math.PI),
+            ra: moonPosition.azimuth ? toHMS((moonPosition.azimuth * 180) / 15) : 'Unknown',
+            dec: moonPosition.altitude ? toDMS(moonPosition.altitude * (180 / Math.PI)) : 'Unknown',
+            az: toDMS((moonPosition.azimuth * 180) / Math.PI),
+            alt: toDMS((moonPosition.altitude * 180) / Math.PI),
             parallacticAngle: moonPosition.parallacticAngle,
             nextMoonHigh: formatTime(new Date(selectedDate.getTime() + 12 * 60 * 60 * 1000), timezone)
         })
     }, [lat, lon, date, currentDate])
 
     return (
-        <div style={{ border: '1px solid #ccc', padding: '10px', width: '300px' }}>
-            <MoonPhaseView
-                phase={moonPhase}
-                shadowIntensity={1.5}
-                shadowSpread={0.2}
-            />
+        <div className={cn(styles.moonWidget, styles[variant])}>
+            <div className={styles.moon}>
+                <div className={styles.moonPhase}>{getPhaseName(moonPhase)}</div>
+                <MoonPhaseImage
+                    phase={.1}
+                    shadowIntensity={1.5}
+                    shadowSpread={0.2}
+                />
+                <div className={styles.date}>{formatDate(currentDate)}</div>
+            </div>
 
-            <p>DATE: {currentDate?.toISOString()}</p>
-            <p>Current Moon Phase: {getPhaseName(moonPhase)}</p>
-            <p>Current Moon Phase: {moonPhase.toFixed(5)}</p>
-            <p>Moon Age: {moonData.age.toFixed(1)} days</p>
-            <p>Distance to Moon: {moonData.distance.toFixed(0)} km</p>
-            <p>Illumination: {Math.round(moonData.illumination * 100)}%</p>
-            <p>Moon Rise: {moonData.moonrise}</p>
-            <p>Moon Set: {moonData.moonset}</p>
-            <p>
-                RA/Dec: {moonData.ra} {moonData.dec}
-            </p>
-            <p>
-                Az/Alt: {moonData.az} {moonData.alt}
-            </p>
-            <p>Next New Moon: {moonData.nextNewMoon}</p>
-            <p>Next Full Moon: {moonData.nextFullMoon}</p>
-            <p>First Quarter: {moonData.nextFirstQuarter}</p>
-            <p>Last Quarter: {moonData.nextLastQuarter}</p>
-            <p>Moon Altitude: {moonData.altitude.toFixed(2)}</p>
-            <p>Moon Azimuth: {moonData.azimuth.toFixed(2)}</p>
-            <p>Parallactic Angle: {moonData.parallacticAngle.toFixed(2)}</p>
-            <p>Next Moon High: {moonData.nextMoonHigh}</p>
+            <div className={styles.information}>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.moonAge}</div>
+                    <span>{moonData.age.toFixed(1)} days</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.distanceToMoon}</div>
+                    <span>{moonData.distance.toFixed(0)} km</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.illumination}</div>
+                    <span>{Math.round(moonData.illumination * 100)}%</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.moonRise}</div>
+                    <span>{moonData.moonrise}</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.moonSet}</div>
+                    <span>{moonData.moonset}</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.raDec}</div>
+                    <span>
+                        {moonData.ra} {moonData.dec}
+                    </span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.azAlt}</div>
+                    <span>
+                        {moonData.az} {moonData.alt}
+                    </span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.nextNewMoon}</div>
+                    <span>{formatDate(moonData.nextNewMoon, 'DD/MM/YYYY')}</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.nextFullMoon}</div>
+                    <span>{formatDate(moonData.nextFullMoon, 'DD/MM/YYYY')}</span>
+                </div>
+                <div className={styles.property}>
+                    <div className={styles.key}>{t.firstQuarter}</div>
+                    <span>{formatDate(moonData.nextFirstQuarter, 'DD/MM/YYYY')}</span>
+                </div>
+                {/*<div className={styles.property}>*/}
+                {/*    <div className={styles.key}>{t.lastQuarter}</div>*/}
+                {/*    <span>{formatDate(moonData.nextLastQuarter, 'DD/MM/YYYY')}</span>*/}
+                {/*</div>*/}
+                {/*<div className={styles.property}>*/}
+                {/*    <div className={styles.key}>{t.moonAltitude}</div>*/}
+                {/*    <span>{moonData.altitude.toFixed(2)}{'°'}</span>*/}
+                {/*</div>*/}
+                {/*<div className={styles.property}>*/}
+                {/*    <div className={styles.key}>{t.moonAzimuth}</div>*/}
+                {/*    <span>{moonData.azimuth.toFixed(2)}{'°'}</span>*/}
+                {/*</div>*/}
+                {/*<div className={styles.property}>*/}
+                {/*    <div className={styles.key}>{t.parallacticAngle}</div>*/}
+                {/*    <span>{moonData.parallacticAngle.toFixed(2)}{'°'}</span>*/}
+                {/*</div>*/}
+                {/*<div className={styles.property}>*/}
+                {/*    <div className={styles.key}>{t.nextMoonHigh}</div>*/}
+                {/*    <span>{moonData.nextMoonHigh}</span>*/}
+                {/*</div>*/}
+            </div>
         </div>
     )
 }
+
+const cn = (...args: (string | boolean | undefined)[]): string => args.filter((item: any) => !!item).join(' ')
 
 function formatTime(date: Date | null, timezone?: string): string {
     return date
@@ -154,6 +238,22 @@ function toDMS(degrees: number): string {
     const m = Math.floor((degrees - d) * 60)
     const s = ((degrees - d) * 3600) % 60
     return `${d}°${m}'${s.toFixed(1)}"`
+}
+
+function formatDate(date: Date | string, format = 'DD/MM/YYYY, HH:mm'): string {
+    const parsedDate = typeof date === 'string' ? new Date(date) : date
+    const day = String(parsedDate.getDate()).padStart(2, '0')
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+    const year = parsedDate.getFullYear()
+    const hours = String(parsedDate.getHours()).padStart(2, '0')
+    const minutes = String(parsedDate.getMinutes()).padStart(2, '0')
+
+    return format
+        .replace('DD', day)
+        .replace('MM', month)
+        .replace('YYYY', String(year))
+        .replace('HH', hours)
+        .replace('mm', minutes)
 }
 
 function getPhaseName(fraction: number): string {
