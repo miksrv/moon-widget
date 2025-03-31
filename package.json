@@ -26,19 +26,19 @@
         "url": "https://github.com/miksrv/moon-widget.git"
     },
     "dependencies": {
-        "pixi.js": "^8.8.1",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
+        "pixi.js": "^8.9.1",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
         "react-scripts": "5.0.1",
         "suncalc": "^1.9.0"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.7",
-        "@eslint/js": "^9.22.0",
+        "@eslint/js": "^9.23.0",
         "@types/prop-types": "^15.7.14",
-        "@types/react": "^19.0.11",
+        "@types/react": "^19.0.12",
         "@types/react-dom": "^19.0.4",
-        "eslint": "^9.22.0",
+        "eslint": "^9.23.0",
         "eslint-plugin-eslint-comments": "^3.2.0",
         "eslint-plugin-eslint-plugin": "^6.4.0",
         "eslint-plugin-import": "^2.31.0",
@@ -50,7 +50,7 @@
         "sass-loader": "^16.0.5",
         "tsup": "^8.4.0",
         "typescript": "^5.8.2",
-        "typescript-eslint": "^8.26.1"
+        "typescript-eslint": "^8.28.0"
     },
     "scripts": {
         "build": "tsup src/index.tsx --dts --format esm,cjs --out-dir dist",
