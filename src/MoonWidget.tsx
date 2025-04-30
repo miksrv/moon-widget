@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SunCalc from 'suncalc'
 
 import MoonImage from './components/MoonImage/MoonImage'
+import MoonPhaseView from './components/MoonView/MoonView'
 import styles from './styles.module.sass'
 
 export interface MoonWidgetProps {
@@ -125,8 +126,23 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
         })
     }, [lat, lon, date, currentDate])
 
+    const [testPhase, setTestPhase] = useState(0)
+
     return (
         <div className={cn(styles.moonWidget, styles[variant])}>
+            <input
+                type='range'
+                name='moonPhase'
+                min={-Math.PI}
+                max={Math.PI}
+                step={0.01}
+                value={testPhase}
+                onChange={(event) => setTestPhase(parseFloat(event.target.value))} />
+            {testPhase}
+            <MoonPhaseView moonPhase={testPhase}
+                           onMoonPhaseUpdate={setTestPhase}
+            />
+
             <div className={styles.moon}>
                 <div className={styles.moonPhase}>{getPhaseName(moonPhase)}</div>
                 <MoonImage illuminationPhase={moonData.illumination}
