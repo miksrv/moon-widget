@@ -10054,6 +10054,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"module-library@npm:*":
+  version: 0.96.0
+  resolution: "module-library@npm:0.96.0"
+  dependencies:
+    string-tree: "npm:*"
+  checksum: 10c0/7d81b2fe0e6a5a1b72a28b64525e6938697e1b7844066d27747cc73b034b42536b5e1ce7e54b626df831f9f02323837ce6191bb2b30ab66e36e25496223418ab
+  languageName: node
+  linkType: hard
+
+"moon-phase@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "moon-phase@npm:0.4.0"
+  dependencies:
+    module-library: "npm:*"
+    web-element: "npm:*"
+  checksum: 10c0/ba6e74f7d2844f2d2e0465781920bfbb9695aeda122b78dfdde2253e418d44171729e79831972d2399dc3a819fa0fe2409704262da460b753567c74093d05c0e
+  languageName: node
+  linkType: hard
+
 "moon-widget@workspace:.":
   version: 0.0.0-use.local
   resolution: "moon-widget@workspace:."
@@ -10070,6 +10089,7 @@ __metadata:
     eslint-plugin-jest: "npm:^28.11.0"
     eslint-plugin-react: "npm:^7.37.4"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
+    moon-phase: "npm:^0.4.0"
     pixi.js: "npm:^8.9.1"
     prettier: "npm:^3.5.3"
     react: "npm:^19.1.0"
@@ -13183,6 +13203,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"string-tree@npm:*":
+  version: 0.7.0
+  resolution: "string-tree@npm:0.7.0"
+  checksum: 10c0/8bba2c25129b19cea9bf925555f4f989d1e5d6b367264f9d3b1632941bdd2e4f0913a9bed59c3ab1f16c8b9bfaf719f84a110ff19ea8f24c1cf743dd319671ef
+  languageName: node
+  linkType: hard
+
 "string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
@@ -14283,6 +14310,15 @@ __metadata:
   dependencies:
     minimalistic-assert: "npm:^1.0.0"
   checksum: 10c0/56edcc5ef2b3d30913ba8f1f5cccc364d180670b24d5f3f8849c1e6fb514e5c7e3a87548ae61227a82859eba6269c11393ae24ce12a2ea1ecb9b465718ddced7
+  languageName: node
+  linkType: hard
+
+"web-element@npm:*":
+  version: 1.6.0
+  resolution: "web-element@npm:1.6.0"
+  dependencies:
+    module-library: "npm:*"
+  checksum: 10c0/ea378b67b495b9001eb8dbf431cdce03ff66720f26536d0d24ec2c46885832e6d8f0daacad112514bff7a6842426a2a27c6ef0a2bd394ae7e160ed1677ef4e65
   languageName: node
   linkType: hard
 

@@ -26,6 +26,7 @@
         "url": "https://github.com/miksrv/moon-widget.git"
     },
     "dependencies": {
+        "moon-phase": "^0.4.0",
         "pixi.js": "^8.9.1",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",

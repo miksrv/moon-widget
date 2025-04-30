@@ -56,6 +56,7 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
     const [moonPhase, setMoonPhase] = useState(0)
     const [moonData, setMoonData] = useState({
         age: 0,
+        phase: 0,
         distance: 0,
         illumination: 0,
         moonrise: 'Unknown',
@@ -107,6 +108,7 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
         setMoonPhase(moonIllumination.phase)
         setMoonData({
             age: moonAge,
+            phase: moonData.phase,
             distance: distanceToMoon,
             illumination: moonIllumination.fraction,
             moonrise: moonTimes.rise ? formatTime(moonTimes.rise, timezone) : 'No rise',
@@ -138,8 +140,8 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
                 step={0.01}
                 value={testPhase}
                 onChange={(event) => setTestPhase(parseFloat(event.target.value))} />
-            {testPhase}
-            <MoonPhaseView moonPhase={testPhase}
+            <MoonPhaseView
+                moonPhase={(moonPhase - 0.5) * (3.14 * 2)}
                            onMoonPhaseUpdate={setTestPhase}
             />
 

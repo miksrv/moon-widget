@@ -134,6 +134,7 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
         }
     }, [])
 
+    // TODO Не срабатывает после инициализации компонента, только после смены даты
     useEffect(() => {
         if (
             leftShadeRef.current &&
