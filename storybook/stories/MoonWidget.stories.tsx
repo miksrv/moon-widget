@@ -1,8 +1,8 @@
 import React from 'react'
 
-import MoonWidget, { MoonWidgetProps } from '../../src/MoonWidget'
-
 import { Meta, StoryFn } from '@storybook/react'
+
+import MoonWidget, { MoonWidgetProps } from '../../src/MoonWidget'
 
 export default {
     title: 'Example/MoonWidget',
@@ -15,16 +15,16 @@ export default {
         variant: {
             control: {
                 type: 'select',
-                options: ['vertical', 'horizontal']
-            }
+                options: ['vertical', 'horizontal'],
+            },
         },
         language: {
             control: {
                 type: 'select',
-                options: ['en', 'ru']
-            }
-        }
-    }
+                options: ['en', 'ru'],
+            },
+        },
+    },
 } as Meta
 
 const Template: StoryFn<MoonWidgetProps> = (args) => (
@@ -40,7 +40,7 @@ Default.args = {
     date: new Date().toISOString(),
     // timezone: 'UTC',
     language: 'ru',
-    variant: 'horizontal'
+    variant: 'horizontal',
 }
 
 export const CustomDate = Template.bind({})
@@ -50,5 +50,5 @@ CustomDate.args = {
     date: '2023-12-25T00:00:00Z',
     timezone: 'UTC',
     language: 'en',
-    variant: 'vertical'
+    variant: 'vertical',
 }

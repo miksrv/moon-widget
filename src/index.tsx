@@ -14,5 +14,5 @@ root.render(
             lon={55.09785}
             timezone={'Asia/Yekaterinburg'}
         />
-    </React.StrictMode>
+    </React.StrictMode>,
 )

@@ -61,21 +61,25 @@ export const MOON_IMAGES = [
     moon_phase_28,
     moon_phase_29,
     moon_phase_30,
-    moon_phase_31
+    moon_phase_31,
 ]
 
 export type MoonImageData = {
-    moonImage: string;
-    rotateDeg: number;
-};
+    moonImage: string
+    rotateDeg: number
+}
 
-export const getMoonImage = (illuminationPhase: number, zenithAngle: number, parallacticAngle: number): MoonImageData =>  {
+export const getMoonImage = (
+    illuminationPhase: number,
+    zenithAngle: number,
+    parallacticAngle: number,
+): MoonImageData => {
     const phaseIndex = Math.floor(illuminationPhase * 31)
     const rotateDeg = (zenithAngle - parallacticAngle) * (180 / Math.PI)
     const moonImage = MOON_IMAGES[phaseIndex]
 
     return {
         moonImage,
-        rotateDeg
+        rotateDeg,
     }
 }

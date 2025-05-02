@@ -9,7 +9,12 @@ interface MoonPhaseImageProps {
     isWaxing: boolean // true - растущая Луна, false - убывающая Луна
 }
 
-const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity = 0.8, shadowSpread = 0.3, isWaxing }) => {
+const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({
+    phase,
+    shadowIntensity = 0.8,
+    shadowSpread = 0.3,
+    isWaxing,
+}) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
@@ -61,7 +66,10 @@ const MoonPhaseImage: React.FC<MoonPhaseImageProps> = ({ phase, shadowIntensity 
             if (isWaxing) {
                 // Растущая Луна (тень уходит справа налево)
                 const visibleFraction = phase * 2 // От 0 (новолуние) до 1 (полнолуние)
-                transitionStart = Math.max(0, 1 - visibleFraction - shadowSpread)
+                transitionStart = Math.max(
+                    0,
+                    1 - visibleFraction - shadowSpread,
+                )
                 transitionEnd = Math.min(1, 1 - visibleFraction + shadowSpread)
 
                 gradient.addColorStop(0, darkShadow)

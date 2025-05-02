@@ -1,11 +1,32 @@
-.vscode
-.github
-.yarn
-*.css
-README.md
+# Yarn
+.yarn/
+
+# ESLint and Prettier config
 eslint.config.mjs
+.prettierrc
+
+# TypeScript declarations
+declarations.d.ts
+
+# Node
+node_modules/
+build/
+dist/
+coverage/
+
+# Rollup
 rollup.config.js
-site.webmanifest
-node_modules
-dist
-coverage
+
+# NextJS
+.next/
+next-env.d.ts
+middleware.ts
+
+# Storybook
+.storybook/main.js
+.storybook/preview.js
+storybook-static/
+
+# Jest
+jest.config.ts
+jest.setup.ts

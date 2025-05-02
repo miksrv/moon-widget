@@ -1,25 +1,36 @@
 import React, { useEffect, useRef } from 'react'
+
 import * as PIXI from 'pixi.js'
 
 import imageMoon from './moon_image.png'
 import {
-degToRad,     forceNumber, formatInterval,
-getPercentIlluminated,
-getPhaseSlot, getTimeSinceNewMoon,     roundToOnePlace} from './utils'
+    degToRad,
+    forceNumber,
+    formatInterval,
+    getPercentIlluminated,
+    getPhaseSlot,
+    getTimeSinceNewMoon,
+    roundToOnePlace,
+} from './utils'
 
 interface MoonPhaseViewProps {
     moonPhase: number
     onMoonPhaseUpdate: (newPhase: number) => void
 }
-
-export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonPhaseUpdate }) => {
+export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({
+    moonPhase,
+    onMoonPhaseUpdate,
+}) => {
     const containerRef = useRef(null)
     const moonSpriteRef = useRef(null)
     const hiddenMoonRef = useRef(null)
     const leftShadeRef = useRef(null)
     const rightShadeRef = useRef(null)
 
-    const center = { x: 180 / 2, y: 180 / 2 }
+    const center = {
+        x: 180 / 2,
+        y: 180 / 2,
+    }
     const radius = 90
 
     const width = center.x * 2
@@ -36,13 +47,18 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
         return phase
     }
 
-    const drawPhase = (leftShade: any, rightShade: any, hiddenMoon: any, phase: any) => {
+    const drawPhase = (
+        leftShade: any,
+        rightShade: any,
+        hiddenMoon: any,
+        phase: any,
+    ) => {
         if (phase <= 0.5) {
-            const scale = 1 - (phase * 4)
+            const scale = 1 - phase * 4
             leftShade.scale.x = 1
             leftShade.x = 0
             rightShade.scale.x = scale
-            rightShade.x = center.x - (scale * center.x)
+            rightShade.x = center.x - scale * center.x
 
             if (phase > 0.25) {
                 hiddenMoon.mask = rightShade
@@ -63,12 +79,12 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
                 hiddenMoon.mask = leftShade
                 hiddenMoon.visible = true
                 leftShade.scale.x = -scale
-                leftShade.x = center.x - (-scale * center.x)
+                leftShade.x = center.x - -scale * center.x
             } else {
                 hiddenMoon.mask = null
                 hiddenMoon.visible = false
                 leftShade.scale.x = -scale
-                leftShade.x = center.x - (-scale * center.x)
+                leftShade.x = center.x - -scale * center.x
                 rightShade.scale.x = 1
                 rightShade.x = 0
             }
@@ -85,7 +101,7 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
                 antialias: true,
                 backgroundAlpha: 0,
                 resolution: 1,
-                view: document.createElement('canvas')
+                view: document.createElement('canvas'),
             })
 
             if (containerRef.current) {
@@ -102,7 +118,13 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
 
             const leftShade = new PIXI.Graphics()
             leftShade.beginFill(0x000000, 0.7)
-            leftShade.arc(center.x * 2, center.y * 2, radius, Math.PI / 2, -Math.PI / 2)
+            leftShade.arc(
+                center.x * 2,
+                center.y * 2,
+                radius,
+                Math.PI / 2,
+                -Math.PI / 2,
+            )
             leftShade.endFill()
             leftShade.pivot.set(center.x, center.y)
             app.stage.addChild(leftShade)
@@ -111,7 +133,13 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
 
             const rightShade = new PIXI.Graphics()
             rightShade.beginFill(0x000000, 0.7)
-            rightShade.arc(center.x * 2, center.y * 2, radius, -Math.PI / 2, Math.PI / 2)
+            rightShade.arc(
+                center.x * 2,
+                center.y * 2,
+                radius,
+                -Math.PI / 2,
+                Math.PI / 2,
+            )
             rightShade.endFill()
             rightShade.pivot.set(center.x, center.y)
             app.stage.addChild(rightShade)
@@ -124,7 +152,12 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
             // @ts-ignore
             hiddenMoonRef.current = hiddenMoon
 
-            drawPhase(leftShade, rightShade, hiddenMoon, convertPhase(moonPhase))
+            drawPhase(
+                leftShade,
+                rightShade,
+                hiddenMoon,
+                convertPhase(moonPhase),
+            )
         }
 
         setup()
@@ -145,7 +178,7 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
                 leftShadeRef.current,
                 rightShadeRef.current,
                 hiddenMoonRef.current,
-                convertPhase(moonPhase)
+                convertPhase(moonPhase),
             )
         }
     }, [moonPhase])
@@ -159,9 +192,11 @@ export const MoonPhaseView: React.FC<MoonPhaseViewProps> = ({ moonPhase, onMoonP
 
     return (
         <div>
-            <select className='form-select'
-onChange={handlePhaseChange}
-value={phaseSlot as number}>
+            <select
+                className="form-select"
+                onChange={handlePhaseChange}
+                value={phaseSlot as number}
+            >
                 <option value={180}>New Moon</option>
                 <option value={-135}>Waxing Crescent</option>
                 <option value={-90}>First Quarter</option>
@@ -171,14 +206,22 @@ value={phaseSlot as number}>
                 <option value={90}>Third Quarter</option>
                 <option value={135}>Waning Crescent</option>
             </select>
-            <div className='mt-1'
-style={{ width: 180, height: 180 }}
-ref={containerRef} />
-            <div className='text-center'>
-                {roundToOnePlace(getPercentIlluminated(moonPhase - Math.PI))}% illuminated
+            <div
+                className="mt-1"
+                style={{
+                    width: 180,
+                    height: 180,
+                }}
+                ref={containerRef}
+            />
+            <div className="text-center">
+                {roundToOnePlace(getPercentIlluminated(moonPhase - Math.PI))}%
+                illuminated
             </div>
-            <div className='text-center'>Time since new moon:</div>
-            <div className='text-center'>{formatInterval(timeSinceNewMoon)}</div>
+            <div className="text-center">Time since new moon:</div>
+            <div className="text-center">
+                {formatInterval(timeSinceNewMoon)}
+            </div>
         </div>
     )
 }

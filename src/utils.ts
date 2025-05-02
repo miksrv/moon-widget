@@ -1,7 +1,7 @@
 /*
  * Force a value into a number.
  */
-const forceNumber = function(n: any) {
+const forceNumber = function (n: any) {
     n = Number(n)
     if (isNaN(n) || typeof n === 'undefined') {
         n = 0
@@ -12,20 +12,20 @@ const forceNumber = function(n: any) {
 /*
  * Convert degrees to radians.
  */
-const degToRad = function(degrees: any) {
-    return degrees * Math.PI / 180
+const degToRad = function (degrees: any) {
+    return (degrees * Math.PI) / 180
 }
 
-const radToDeg = function(radians: any) {
-    return radians * 180 / Math.PI
+const radToDeg = function (radians: any) {
+    return (radians * 180) / Math.PI
 }
 
-const getPercentIlluminated = function(moonPhase: any) {
+const getPercentIlluminated = function (moonPhase: any) {
     const percent = (1 - Math.cos(moonPhase)) / 2
     return percent * 100
 }
 
-const roundToOnePlace = function(n: any) {
+const roundToOnePlace = function (n: any) {
     return Math.round(n * 10) / 10
 }
 
@@ -68,13 +68,11 @@ const roundToOnePlace = function(n: any) {
  * only 5 degrees around this orbit. The waxing and waning phases
  * take up the rest of the orbit.
  */
-const getPhaseSlot = function(moonPhase: any) {
+const getPhaseSlot = function (moonPhase: any) {
     const phase = radToDeg(moonPhase)
 
     // New Moon
-    if (Math.abs(phase - 180) < 5 ||
-        Math.abs(phase + 180) < 5
-    ) {
+    if (Math.abs(phase - 180) < 5 || Math.abs(phase + 180) < 5) {
         return 180
     }
 
@@ -127,7 +125,7 @@ const getPhaseSlot = function(moonPhase: any) {
  * around the earth. So, this time interval can be computed with the
  * moonPhase value.
  */
-const getTimeSinceNewMoon = function(phase: any) {
+const getTimeSinceNewMoon = function (phase: any) {
     return (phase + Math.PI) / ((Math.PI * 2) / 708.734136)
 }
 
@@ -135,7 +133,7 @@ const getTimeSinceNewMoon = function(phase: any) {
  * Given a time interval in hours, shorten it by displaying days and
  * hours.
  */
-const formatInterval = function(i: any) {
+const formatInterval = function (i: any) {
     const quotient = Math.floor(i / 24)
     const remainder = i % 24
 
@@ -145,11 +143,16 @@ const formatInterval = function(i: any) {
     if (quotient) {
         return `${quotient} day${quotientPlural}, ${remainder} hour${remainderPlural}`
     }
-        return `${remainder} hour${remainderPlural}`
-
+    return `${remainder} hour${remainderPlural}`
 }
 
 export {
-    forceNumber, degToRad, radToDeg, getPercentIlluminated,
-    roundToOnePlace, getPhaseSlot, getTimeSinceNewMoon, formatInterval
+    degToRad,
+    forceNumber,
+    formatInterval,
+    getPercentIlluminated,
+    getPhaseSlot,
+    getTimeSinceNewMoon,
+    radToDeg,
+    roundToOnePlace,
 }

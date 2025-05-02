@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+
 import SunCalc from 'suncalc'
 
 import MoonImage from './components/MoonImage/MoonImage'
 import MoonPhaseView from './components/MoonView/MoonView'
+
 import styles from './styles.module.sass'
 
 export interface MoonWidgetProps {
@@ -30,7 +32,7 @@ const translations = {
         moonAltitude: 'Moon Altitude',
         moonAzimuth: 'Moon Azimuth',
         parallacticAngle: 'Parallactic Angle',
-        nextMoonHigh: 'Next Moon High'
+        nextMoonHigh: 'Next Moon High',
     },
     ru: {
         moonAge: 'Возраст',
@@ -47,12 +49,21 @@ const translations = {
         moonAltitude: 'Высота',
         moonAzimuth: 'Азимут',
         parallacticAngle: 'Параллактический угол',
-        nextMoonHigh: 'Следующий максимум'
-    }
+        nextMoonHigh: 'Следующий максимум',
+    },
 }
 
-const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, language = 'en', variant = 'vertical' }) => {
-    const [currentDate, setCurrentDate] = useState(() => (date ? new Date(date) : new Date()))
+const MoonWidget: React.FC<MoonWidgetProps> = ({
+    lat,
+    lon,
+    date,
+    timezone,
+    language = 'en',
+    variant = 'vertical',
+}) => {
+    const [currentDate, setCurrentDate] = useState(() =>
+        date ? new Date(date) : new Date(),
+    )
     const [moonPhase, setMoonPhase] = useState(0)
     const [moonData, setMoonData] = useState({
         age: 0,
@@ -72,7 +83,7 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
         az: 'Unknown',
         alt: 'Unknown',
         parallacticAngle: 0,
-        nextMoonHigh: 'Unknown'
+        nextMoonHigh: 'Unknown',
     })
 
     const t = translations[language]
@@ -98,7 +109,12 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
             const testDate = new Date(selectedDate)
             for (let days = 0; days < 30; days++) {
                 testDate.setDate(testDate.getDate() + 1)
-                if (Math.abs(SunCalc.getMoonIllumination(testDate).phase - targetPhase) <= 0.035) {
+                if (
+                    Math.abs(
+                        SunCalc.getMoonIllumination(testDate).phase -
+                            targetPhase,
+                    ) <= 0.035
+                ) {
                     return testDate.toISOString().split('T')[0]
                 }
             }
@@ -111,20 +127,31 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
             phase: moonData.phase,
             distance: distanceToMoon,
             illumination: moonIllumination.fraction,
-            moonrise: moonTimes.rise ? formatTime(moonTimes.rise, timezone) : 'No rise',
-            moonset: moonTimes.set ? formatTime(moonTimes.set, timezone) : 'No set',
+            moonrise: moonTimes.rise
+                ? formatTime(moonTimes.rise, timezone)
+                : 'No rise',
+            moonset: moonTimes.set
+                ? formatTime(moonTimes.set, timezone)
+                : 'No set',
             nextNewMoon: findNextMoonPhase(0),
             nextFullMoon: findNextMoonPhase(0.5),
             nextFirstQuarter: findNextMoonPhase(0.25),
             nextLastQuarter: findNextMoonPhase(0.75),
             altitude: moonPosition.altitude,
             azimuth: moonPosition.azimuth,
-            ra: moonPosition.azimuth ? toHMS((moonPosition.azimuth * 180) / 15) : 'Unknown',
-            dec: moonPosition.altitude ? toDMS(moonPosition.altitude * (180 / Math.PI)) : 'Unknown',
+            ra: moonPosition.azimuth
+                ? toHMS((moonPosition.azimuth * 180) / 15)
+                : 'Unknown',
+            dec: moonPosition.altitude
+                ? toDMS(moonPosition.altitude * (180 / Math.PI))
+                : 'Unknown',
             az: toDMS((moonPosition.azimuth * 180) / Math.PI),
             alt: toDMS((moonPosition.altitude * 180) / Math.PI),
             parallacticAngle: moonPosition.parallacticAngle,
-            nextMoonHigh: formatTime(new Date(selectedDate.getTime() + 12 * 60 * 60 * 1000), timezone)
+            nextMoonHigh: formatTime(
+                new Date(selectedDate.getTime() + 12 * 60 * 60 * 1000),
+                timezone,
+            ),
         })
     }, [lat, lon, date, currentDate])
 
@@ -133,23 +160,30 @@ const MoonWidget: React.FC<MoonWidgetProps> = ({ lat, lon, date, timezone, langu
     return (
         <div className={cn(styles.moonWidget, styles[variant])}>
             <input
-                type='range'
-                name='moonPhase'
+                type="range"
+                name="moonPhase"
                 min={-Math.PI}
                 max={Math.PI}
                 step={0.01}
                 value={testPhase}
-                onChange={(event) => setTestPhase(parseFloat(event.target.value))} />
+                onChange={(event) =>
+                    setTestPhase(parseFloat(event.target.value))
+                }
+            />
             <MoonPhaseView
                 moonPhase={(moonPhase - 0.5) * (3.14 * 2)}
-                           onMoonPhaseUpdate={setTestPhase}
+                onMoonPhaseUpdate={setTestPhase}
             />
 
             <div className={styles.moon}>
-                <div className={styles.moonPhase}>{getPhaseName(moonPhase)}</div>
-                <MoonImage illuminationPhase={moonData.illumination}
-zenithAngle={moonData.altitude}
-parallacticAngle={moonData.parallacticAngle} />
+                <div className={styles.moonPhase}>
+                    {getPhaseName(moonPhase)}
+                </div>
+                <MoonImage
+                    illuminationPhase={moonData.illumination}
+                    zenithAngle={moonData.altitude}
+                    parallacticAngle={moonData.parallacticAngle}
+                />
                 <div className={styles.date}>{formatDate(currentDate)}</div>
             </div>
 
@@ -188,15 +222,21 @@ parallacticAngle={moonData.parallacticAngle} />
                 </div>
                 <div className={styles.property}>
                     <div className={styles.key}>{t.nextNewMoon}</div>
-                    <span>{formatDate(moonData.nextNewMoon, 'DD/MM/YYYY')}</span>
+                    <span>
+                        {formatDate(moonData.nextNewMoon, 'DD/MM/YYYY')}
+                    </span>
                 </div>
                 <div className={styles.property}>
                     <div className={styles.key}>{t.nextFullMoon}</div>
-                    <span>{formatDate(moonData.nextFullMoon, 'DD/MM/YYYY')}</span>
+                    <span>
+                        {formatDate(moonData.nextFullMoon, 'DD/MM/YYYY')}
+                    </span>
                 </div>
                 <div className={styles.property}>
                     <div className={styles.key}>{t.firstQuarter}</div>
-                    <span>{formatDate(moonData.nextFirstQuarter, 'DD/MM/YYYY')}</span>
+                    <span>
+                        {formatDate(moonData.nextFirstQuarter, 'DD/MM/YYYY')}
+                    </span>
                 </div>
                 {/*<div className={styles.property}>*/}
                 {/*    <div className={styles.key}>{t.lastQuarter}</div>*/}
@@ -223,7 +263,8 @@ parallacticAngle={moonData.parallacticAngle} />
     )
 }
 
-const cn = (...args: (string | boolean | undefined)[]): string => args.filter((item: any) => !!item).join(' ')
+const cn = (...args: Array<string | boolean | undefined>): string =>
+    args.filter((item: any) => !!item).join(' ')
 
 function formatTime(date: Date | null, timezone?: string): string {
     return date
@@ -231,7 +272,7 @@ function formatTime(date: Date | null, timezone?: string): string {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit',
-              timeZone: timezone || 'UTC'
+              timeZone: timezone || 'UTC',
           }).format(date)
         : 'No event'
 }

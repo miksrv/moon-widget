@@ -13,11 +13,11 @@ const forceNumber = (n: unknown): number => {
  * Convert degrees to radians.
  */
 const degToRad = (degrees: number): number => {
-    return degrees * Math.PI / 180
+    return (degrees * Math.PI) / 180
 }
 
 const radToDeg = (radians: number): number => {
-    return radians * 180 / Math.PI
+    return (radians * 180) / Math.PI
 }
 
 const getPercentIlluminated = (moonPhase: number): number => {
@@ -108,12 +108,12 @@ const formatInterval = (i: number): string => {
 }
 
 export {
-    forceNumber,
     degToRad,
-    radToDeg,
+    forceNumber,
+    formatInterval,
     getPercentIlluminated,
-    roundToOnePlace,
     getPhaseSlot,
     getTimeSinceNewMoon,
-    formatInterval
+    radToDeg,
+    roundToOnePlace,
 }

@@ -2,7 +2,10 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
-    stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+    stories: [
+        '../stories/**/*.mdx',
+        '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    ],
 
     addons: [
         '@storybook/addon-webpack5-compiler-swc',
@@ -12,19 +15,19 @@ const config = {
         '@storybook/addon-essentials',
         '@chromatic-com/storybook',
         '@storybook/addon-interactions',
-        '@storybook/addon-themes'
+        '@storybook/addon-themes',
     ],
 
     framework: {
         name: '@storybook/react-webpack5',
-        options: {}
+        options: {},
     },
 
     webpackFinal: async (config) => {
         config.resolve.plugins = [
             new TsconfigPathsPlugin({
-                configFile: '../tsconfig.json'
-            })
+                configFile: '../tsconfig.json',
+            }),
         ]
 
         config.module.rules.push({
@@ -33,9 +36,9 @@ const config = {
                 'style-loader',
                 'css-loader',
                 {
-                    loader: 'sass-loader'
-                }
-            ]
+                    loader: 'sass-loader',
+                },
+            ],
         })
 
         return config
@@ -44,7 +47,7 @@ const config = {
     docs: {},
 
     typescript: {
-        reactDocgen: 'react-docgen-typescript'
-    }
+        reactDocgen: 'react-docgen-typescript',
+    },
 }
 export default config
