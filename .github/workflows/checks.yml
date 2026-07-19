@@ -13,9 +13,9 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    ui-checks:
+    widget-checks:
         if: github.event.pull_request.draft == false
-        name: Build & Tests
+        name: Widget - Lint, Test & Build
         runs-on: ubuntu-latest
 
         steps:
@@ -28,21 +28,8 @@ jobs:
                   cache: 'yarn'
                   cache-dependency-path: 'yarn.lock'
 
-            - name: Cache node modules
-              uses: actions/cache@v4
-              id: cache-npm
-              with:
-                  path: |
-                      node_modules
-                      ~/.npm
-                  key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-modules-
-                      ${{ runner.os }}-
-
-            - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-              name: Install dependencies
-              run: yarn workspaces focus
+            - name: Install dependencies
+              run: corepack enable && yarn install --immutable
 
             - name: Linter
               run: yarn eslint:check
@@ -50,49 +37,35 @@ jobs:
             - name: Prettier
               run: yarn prettier:check
 
-            - name: Cache UI build
-              uses: actions/cache@v4
-              id: cache-build
-              with:
-                  path: dist
-                  key: ${{ runner.os }}-dist-${{ hashFiles('**/*.ts', '**/*.tsx') }}
-                  restore-keys: |
-                      ${{ runner.os }}-dist-
-                      ${{ runner.os }}-
-
-            - name: UI Unit Tests
+            - name: Unit tests
               run: yarn test
 
-            - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
-              name: Build UI
+            - name: Build
               run: yarn build
-#    storybook-check:
-#        name: Verify Storybook
-#        runs-on: ubuntu-latest
-#        needs: ui-checks
-#
-#        steps:
-#            - uses: actions/checkout@v4
-#
-#            - name: Install Node.js
-#              uses: actions/setup-node@v4
-#              with:
-#                  node-version: 20
-#                  cache: 'npm'
-#
-#            - name: Install dependencies for Storybook
-#              working-directory: storybook
-#              run: npm install
-#
-#            - name: Build Storybook
-#              working-directory: storybook
-#              run: npm run build-storybook
-#
-#            - name: Verify Storybook Build
-#              run: |
-#                  if [ ! -d "storybook/storybook-static" ]; then
-#                    echo "Storybook build failed: directory not found."
-#                    exit 1
-#                  else
-#                    echo "Storybook build successful."
-#                  fi
+
+    site-checks:
+        if: github.event.pull_request.draft == false
+        name: Site - Lint & Build
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: apps/site
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'yarn'
+                  cache-dependency-path: 'apps/site/yarn.lock'
+
+            - name: Install dependencies
+              run: corepack enable && yarn install --immutable
+
+            - name: Linter
+              run: yarn lint
+
+            - name: Build (static export)
+              run: yarn build

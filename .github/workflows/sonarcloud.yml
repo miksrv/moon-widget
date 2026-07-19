@@ -56,7 +56,7 @@ jobs:
                   if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
                     echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
                   else
-                    echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+                    echo "VERSION=$(jq -r '.version' packages/moon-widget/package.json)" >> $GITHUB_ENV
                   fi
 
             - name: SonarCloud Scan
