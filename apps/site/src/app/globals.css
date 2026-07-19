@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #07070d;
+    color: #f4f4f8;
+    font-family: -apple-system, system-ui, 'Helvetica Neue', Roboto, sans-serif;
+}
+
+a {
+    color: inherit;
+}

@@ -1,0 +1,51 @@
+name: Deploy Site
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'apps/site/**'
+    workflow_run:
+        workflows:
+            - Release
+        types:
+            - completed
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+        name: Build & Deploy
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: apps/site
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'yarn'
+                  cache-dependency-path: apps/site/yarn.lock
+
+            - name: Install dependencies (real npm-registry install of moon-widget)
+              run: corepack enable && yarn install --immutable
+
+            - name: Build static export
+              run: yarn build
+
+            # NOTE: this project's shared hosting speaks FTP/FTPS. If it's SFTP-only instead,
+            # swap this step for an SFTP action (e.g. wlixcc/SFTP-Deploy-Action) and rename secrets.
+            - name: Deploy via FTP
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+              with:
+                  server: ${{ secrets.FTP_SERVER }}
+                  username: ${{ secrets.FTP_USERNAME }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  protocol: ftps
+                  local-dir: apps/site/out/
+                  server-dir: ./
