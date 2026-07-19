@@ -28,5 +28,4 @@ middleware.ts
 storybook-static/
 
 # Jest
-jest.config.ts
 jest.setup.ts
