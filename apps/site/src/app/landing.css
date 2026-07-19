@@ -1,6 +1,7 @@
 :root {
     --lw-bg: #07070d;
     --lw-bg-alt: #0a0b13;
+    --lw-surface: #121320;
     --lw-surface-2: #171929;
     --lw-border: rgba(255, 255, 255, 0.08);
     --lw-border-strong: rgba(255, 255, 255, 0.16);
