@@ -1,83 +1,41 @@
 {
-    "name": "moon-widget",
-    "version": "0.1.0",
-    "description": "React component for displaying moon phases",
-    "main": "dist/index.js",
-    "module": "dist/index.esm.js",
-    "types": "dist/index.d.ts",
-    "files": [
-        "dist"
-    ],
-    "packageManager": "yarn@4.6.0",
-    "keywords": [
-        "react",
-        "moon",
-        "widget",
-        "astronomy"
-    ],
+    "name": "moon-widget-monorepo",
+    "version": "0.0.0",
+    "private": true,
+    "description": "moon-widget monorepo: the npm library (packages/moon-widget) and its Next.js demo/landing site (apps/site)",
+    "packageManager": "yarn@4.6.0+sha512.5383cc12567a95f1d668fbe762dfe0075c595b4bfff433be478dbbe24e05251a8e8c3eb992a986667c1d53b6c3a9c85b8398c35a960587fbd9fa3a0915406728",
     "author": "Misha Topchilo <20854498+miksrv@users.noreply.github.com>",
     "license": "MIT",
-    "peerDependencies": {
-        "react": ">=17.0.0",
-        "react-dom": ">=17.0.0"
-    },
     "repository": {
         "type": "git",
         "url": "https://github.com/miksrv/moon-widget.git"
     },
-    "dependencies": {
-        "moon-phase": "^0.4.0",
-        "pixi.js": "^8.9.1",
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0",
-        "react-scripts": "5.0.1",
-        "suncalc": "^1.9.0"
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "yarn workspace moon-widget build",
+        "test": "yarn workspace moon-widget test",
+        "test:coverage": "yarn workspace moon-widget test:coverage",
+        "eslint:check": "eslint",
+        "eslint:fix": "eslint --fix",
+        "prettier:check": "prettier --check .",
+        "prettier:fix": "prettier --write .",
+        "changeset": "changeset",
+        "release": "yarn workspace moon-widget build && changeset publish"
     },
     "devDependencies": {
-        "@types/prop-types": "^15.7.14",
-        "@types/react": "^19.0.12",
-        "@types/react-dom": "^19.0.4",
+        "@changesets/cli": "^2.28.1",
         "eslint": "^9.25.1",
         "eslint-config-prettier": "^10.1.2",
         "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jest": "^28.11.0",
         "eslint-plugin-prettier": "^5.2.6",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "prettier": "^3.5.3",
-        "sass": "^1.86.0",
-        "sass-loader": "^16.0.5",
-        "tsup": "^8.4.0",
         "typescript": "^5.8.2",
         "typescript-eslint": "^8.31.1"
-    },
-    "scripts": {
-        "build": "tsup src/index.tsx --dts --format esm,cjs --out-dir dist",
-        "prepare": "npm run build",
-        "test": "jest",
-        "test:coverage": "jest --coverage",
-        "test:watch": "jest --watch --testNamePattern",
-        "eslint:check": "eslint",
-        "eslint:fix": "eslint --fix",
-        "prettier:check": "prettier --check .",
-        "prettier:fix": "prettier --write ."
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
     }
 }

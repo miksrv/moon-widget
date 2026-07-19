@@ -6,6 +6,7 @@ import importPlugin from 'eslint-plugin-import'
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
 import prettierPlugin from 'eslint-plugin-prettier'
 import prettierConfig from 'eslint-config-prettier'
+import jestPlugin from 'eslint-plugin-jest'
 
 export default defineConfig([
     // register all the plugins up-front
@@ -18,10 +19,8 @@ export default defineConfig([
             ['import']: importPlugin,
             ['prettier']: prettierPlugin,
             ['simple-import-sort']: simpleImportSortPlugin,
-            // ['jest']: jestPlugin,
             // ['next']: nextPlugin,
             // ['jsx-a11y']: jsxA11yPlugin,
-            // ['react-hooks']: reactHooksPlugin,
             // ['unicorn']: unicornPlugin,
         },
         extends: [prettierConfig],
@@ -37,6 +36,7 @@ export default defineConfig([
             '**/build/**',
             '**/dist/**',
             '**/coverage/**',
+            'apps/**',
 
             // WebPack
             // '**/webpack.config.js',
@@ -47,22 +47,26 @@ export default defineConfig([
             // PM2 Server
             // '**/ecosystem.config.js',
 
-            // NextJS
-            // '**/next-i18next.config.js',
-            // '**/next.config.js',
-            // '**/.next/**',
-            // '**/next-env.d.ts',
-            // '**/middleware.ts'
-
-            // Storybook
-            '**/.storybook/main.js',
-            '**/.storybook/preview.js',
-            '**/storybook-static/',
-
             // Jest
-            '**/jest.config.ts',
+            '**/jest.config.{js,ts}',
             '**/jest.setup.ts',
+            '**/test/fileMock.js',
+
+            // tsup
+            '**/tsup.config.ts',
         ],
+    },
+
+    // jest test files
+    {
+        files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+        plugins: { jest: jestPlugin },
+        languageOptions: {
+            globals: jestPlugin.environments.globals.globals,
+        },
+        rules: {
+            ...jestPlugin.configs.recommended.rules,
+        },
     },
 
     // extends ...
@@ -267,8 +271,8 @@ export default defineConfig([
                     devDependencies: [
                         '**/*.test.{ts,tsx}',
                         '**/*.spec.{ts,tsx}',
-                        '**/*.stories.{ts,tsx}',
-                        '**/setupTests.ts',
+                        '**/jest.config.{js,ts}',
+                        '**/jest.setup.ts',
                     ],
                 },
             ],
