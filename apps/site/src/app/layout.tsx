@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 
-import './globals.css'
+import { SITE_URL } from '../config'
 
-// TODO: replace with the real production domain once it's known
-const SITE_URL = 'https://moon-widget.example.com'
+import './globals.css'
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
