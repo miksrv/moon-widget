@@ -7,7 +7,8 @@
     --lw-border-strong: rgba(255, 255, 255, 0.16);
     --lw-text: #f4f4f8;
     --lw-text-dim: #9497ac;
-    --lw-text-faint: #5e6178;
+    /* #5e6178 measured ~3.3:1 against --lw-bg — under WCAG AA's 4.5:1 for this text size. */
+    --lw-text-faint: #7a7d94;
     --lw-accent: #a78bfa;
     --lw-accent-2: #7c6cf0;
     --lw-accent-soft: rgba(167, 139, 250, 0.14);
@@ -29,6 +30,12 @@
     position: relative;
     background: var(--lw-bg);
     overflow-x: clip;
+}
+
+.lw a:focus-visible,
+.lw button:focus-visible {
+    outline: 2px solid var(--lw-accent);
+    outline-offset: 2px;
 }
 
 .lw-container {
@@ -951,5 +958,16 @@
 
     .lw-section {
         padding: 64px 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lw-star {
+        animation: none;
+        opacity: var(--lw-star-max-opacity, 0.9);
+    }
+
+    .lw-live-dot__pulse {
+        animation: none;
     }
 }
