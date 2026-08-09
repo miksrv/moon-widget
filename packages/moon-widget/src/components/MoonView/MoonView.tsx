@@ -103,7 +103,11 @@ const MoonView: React.FC<MoonViewProps> = ({ phase, size = 180 }) => {
             appInitialized = true
 
             if (destroyed) {
-                app.destroy(true)
+                app.destroy(true, {
+                    children: true,
+                    texture: true,
+                    textureSource: true,
+                })
                 return
             }
 
@@ -155,7 +159,14 @@ const MoonView: React.FC<MoonViewProps> = ({ phase, size = 180 }) => {
             destroyed = true
             readyRef.current = false
             if (appInitialized) {
-                app.destroy(true)
+                // Without `{ children: true, texture: true }`, `stage.destroy()` leaves the
+                // sprites' shared texture alive, which keeps its backing `Image` permanently
+                // registered in PIXI's global texture cache (leaks on every mount/unmount).
+                app.destroy(true, {
+                    children: true,
+                    texture: true,
+                    textureSource: true,
+                })
             }
         }
     }, [size])
@@ -181,6 +192,7 @@ const MoonView: React.FC<MoonViewProps> = ({ phase, size = 180 }) => {
     return (
         <div
             ref={containerRef}
+            aria-hidden="true"
             style={{
                 width: size,
                 height: size,
