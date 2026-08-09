@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 const CRATERS = [
     { top: '18%', left: '28%', size: 46 },
@@ -12,11 +12,13 @@ const CRATERS = [
 ]
 
 export default function MoonOrb() {
+    const reducedMotion = useReducedMotion()
+
     return (
         <div className="lw-orb-wrap">
             <motion.div
                 className="lw-orb-ring"
-                animate={{ rotate: 360 }}
+                animate={reducedMotion ? {} : { rotate: 360 }}
                 transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
             >
                 <div className="lw-orb-dot" />
@@ -25,7 +27,7 @@ export default function MoonOrb() {
             <motion.div
                 className="lw-orb"
                 initial={{ y: 0 }}
-                animate={{ y: [0, -14, 0] }}
+                animate={reducedMotion ? {} : { y: [0, -14, 0] }}
                 transition={{
                     duration: 6,
                     repeat: Infinity,
