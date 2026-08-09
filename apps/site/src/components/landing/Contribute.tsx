@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion'
 
+import { GITHUB_URL } from '../../config'
+
 import {
     ArrowRightIcon,
     BugIcon,
@@ -9,8 +11,6 @@ import {
     LightbulbIcon,
     PullRequestIcon,
 } from './Icons'
-
-const GITHUB_URL = 'https://github.com/miksrv/moon-widget'
 
 const WAYS_TO_HELP = [
     {
