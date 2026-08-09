@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion'
 
+import { GITHUB_URL } from '../../config'
+
 import { ArrowRightIcon, GithubIcon, StarIcon } from './Icons'
 import MoonOrb from './MoonOrb'
-
-const GITHUB_URL = 'https://github.com/miksrv/moon-widget'
 
 const fadeUp = {
     hidden: { opacity: 0, y: 18 },

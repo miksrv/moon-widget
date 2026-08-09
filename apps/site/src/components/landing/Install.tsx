@@ -4,6 +4,8 @@ import { useState } from 'react'
 
 import { motion } from 'framer-motion'
 
+import { GITHUB_URL } from '../../config'
+
 import CopyButton from './CopyButton'
 import { BookIcon } from './Icons'
 
@@ -44,6 +46,7 @@ export default function Install() {
                                     key={pm.id}
                                     type="button"
                                     className={`lw-tab${active === pm.id ? ' lw-tab--active' : ''}`}
+                                    aria-pressed={active === pm.id}
                                     onClick={() => setActive(pm.id)}
                                 >
                                     {pm.label}
@@ -64,7 +67,7 @@ export default function Install() {
                                 <span>
                                     Need help? Check the{' '}
                                     <a
-                                        href="https://github.com/miksrv/moon-widget/blob/main/packages/moon-widget/README.md"
+                                        href={`${GITHUB_URL}/blob/main/packages/moon-widget/README.md`}
                                         target="_blank"
                                         rel="noreferrer"
                                     >
@@ -134,7 +137,7 @@ export default function Install() {
                                 <span className="lw-tok-prop">variant</span>
                                 {'='}
                                 <span className="lw-tok-str">
-                                    &quot;horizontal&quot;
+                                    &quot;panel&quot;
                                 </span>
                                 {'\n        />\n    )\n}'}
                             </code>
