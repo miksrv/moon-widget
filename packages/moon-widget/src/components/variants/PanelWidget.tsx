@@ -102,11 +102,7 @@ const PanelWidget: React.FC<VariantProps> = ({
                 layout="icon-inline"
                 icon={<GlobeIcon size={16} />}
                 label={t.raDec}
-                value={
-                    data.ra != null && data.dec != null
-                        ? `${toHMS(data.ra)} ${toDMS(data.dec)}`
-                        : 'Unknown'
-                }
+                value={`${toHMS(data.ra)} ${toDMS(data.dec)}`}
             />
             <StatItem
                 layout="icon-inline"
