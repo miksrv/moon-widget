@@ -2,18 +2,22 @@ export function toHMS(degrees: number): string {
     if (isNaN(degrees)) {
         return 'Unknown'
     }
-    const hours = Math.floor(degrees / 15)
-    const minutes = Math.floor((degrees % 15) * 4)
-    const seconds = ((degrees % 15) * 240) % 60
-    return `${hours}h ${minutes}m ${seconds.toFixed(1)}s`
+    const sign = degrees < 0 ? '-' : ''
+    const abs = Math.abs(degrees)
+    const hours = Math.floor(abs / 15)
+    const minutes = Math.floor((abs % 15) * 4)
+    const seconds = ((abs % 15) * 240) % 60
+    return `${sign}${hours}h ${minutes}m ${seconds.toFixed(1)}s`
 }
 
 export function toDMS(degrees: number): string {
     if (isNaN(degrees)) {
         return 'Unknown'
     }
-    const d = Math.floor(degrees)
-    const m = Math.floor((degrees - d) * 60)
-    const s = ((degrees - d) * 3600) % 60
-    return `${d}°${m}'${s.toFixed(1)}"`
+    const sign = degrees < 0 ? '-' : ''
+    const abs = Math.abs(degrees)
+    const d = Math.floor(abs)
+    const m = Math.floor((abs - d) * 60)
+    const s = ((abs - d) * 3600) % 60
+    return `${sign}${d}°${m}'${s.toFixed(1)}"`
 }

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 
-import { GithubIcon, MoonLogoIcon } from './Icons'
+import { GITHUB_URL } from '../../config'
 
-const GITHUB_URL = 'https://github.com/miksrv/moon-widget'
+import { GithubIcon, MoonLogoIcon } from './Icons'
 
 const NAV_LINKS = [
     { href: '#showcase', label: 'Showcase' },

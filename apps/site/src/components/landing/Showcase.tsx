@@ -53,6 +53,7 @@ export default function Showcase() {
                                 key={item.key}
                                 type="button"
                                 className={`lw-tab ${variant === item.key ? 'lw-tab--active' : ''}`}
+                                aria-pressed={variant === item.key}
                                 onClick={() => setVariant(item.key)}
                             >
                                 {item.label}
@@ -64,6 +65,7 @@ export default function Showcase() {
                         <button
                             type="button"
                             className={`lw-tab ${theme === 'dark' ? 'lw-tab--active' : ''}`}
+                            aria-pressed={theme === 'dark'}
                             onClick={() => setTheme('dark')}
                         >
                             Dark
@@ -71,6 +73,7 @@ export default function Showcase() {
                         <button
                             type="button"
                             className={`lw-tab ${theme === 'light' ? 'lw-tab--active' : ''}`}
+                            aria-pressed={theme === 'light'}
                             onClick={() => setTheme('light')}
                         >
                             Light
@@ -90,7 +93,10 @@ export default function Showcase() {
                     >
                         <AnimatePresence mode="wait" initial={false}>
                             <motion.div
-                                key={`${variant}-${theme}`}
+                                // Keyed on variant only — a theme toggle just flips CSS custom
+                                // properties, it shouldn't unmount/remount MoonWidget (which
+                                // would re-run its async PIXI init) on every click.
+                                key={variant}
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -8 }}

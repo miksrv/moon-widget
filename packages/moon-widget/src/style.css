@@ -11,6 +11,9 @@
     --moon-widget-text-secondary: #9a9ba0;
     --moon-widget-accent: #8b5cf6;
     --moon-widget-accent-contrast: #ffffff;
+    /* Darker than --moon-widget-accent — #8b5cf6 under white text is ~4.23:1, just under WCAG AA's
+       4.5:1 for text this size/weight; this shade clears it while keeping the same hue. */
+    --moon-widget-badge-background: #7c3aed;
 }
 
 .moon-widget--light {
@@ -66,7 +69,7 @@
     align-items: center;
     padding: 3px 10px;
     border-radius: 999px;
-    background-color: var(--moon-widget-accent);
+    background-color: var(--moon-widget-badge-background);
     color: var(--moon-widget-accent-contrast);
     font-size: calc(var(--moon-widget-font-size) * 0.9);
     font-weight: 600;
@@ -398,6 +401,12 @@
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .moon-widget__live--active .moon-widget__live-dot {
+        animation: none;
+    }
+}
+
 /* Variant: compact */
 
 .moon-widget--compact {
@@ -443,7 +452,8 @@
 .moon-widget--gauge {
     flex-direction: column;
     align-items: center;
-    width: 260px;
+    width: 100%;
+    max-width: 260px;
 }
 
 .moon-widget--gauge .moon-widget__gauge-caption {
@@ -491,7 +501,8 @@
 .moon-widget--timeline {
     flex-direction: column;
     gap: 16px;
-    width: 480px;
+    width: 100%;
+    max-width: 480px;
 }
 
 .moon-widget--timeline .moon-widget__row {
@@ -512,7 +523,8 @@
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
 }
 
 .moon-widget--detail .moon-widget__detail-header {
@@ -552,7 +564,8 @@
 .moon-widget--live {
     flex-direction: column;
     gap: 16px;
-    width: 560px;
+    width: 100%;
+    max-width: 560px;
 }
 
 .moon-widget--live .moon-widget__row {
@@ -561,7 +574,7 @@
     gap: 24px;
 }
 
-.moon-widget--live .moon-widget__header > span:first-child {
+.moon-widget--live .moon-widget__moon-pill {
     display: inline-flex;
     align-items: center;
     padding: 4px 12px;
@@ -588,7 +601,8 @@
 .moon-widget--panel {
     flex-direction: column;
     gap: 16px;
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
 }
 
 .moon-widget--panel .moon-widget__mini-header {

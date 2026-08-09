@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import SunCalc from 'suncalc'
+
+import { getMoonEquatorialCoords } from '../utils/equatorial'
 
 export type PhaseKey =
     | 'newMoon'
@@ -36,9 +38,13 @@ export interface MoonData {
     altitude: number
     azimuth: number
     parallacticAngle: number
-    ra: number | null
-    dec: number | null
+    /** Right ascension, in degrees — geocentric, independent of observer location. */
+    ra: number
+    /** Declination, in degrees — geocentric, independent of observer location. */
+    dec: number
+    /** Azimuth, in degrees — observer-relative (horizon coordinates). */
     az: number
+    /** Altitude, in degrees — observer-relative (horizon coordinates). */
     alt: number
     /** New moon, first quarter, full moon, last quarter — canonical cycle order */
     events: MoonPhaseEvent[]
@@ -98,18 +104,10 @@ function findNextMoonPhase(from: Date, targetPhase: number): Date | null {
     return null
 }
 
-function computeMoonData(
-    selectedDate: Date,
-    lat: number,
-    lon: number,
-): MoonData {
-    const moonIllumination = SunCalc.getMoonIllumination(selectedDate)
-    const moonPosition = SunCalc.getMoonPosition(selectedDate, lat, lon)
-    const moonTimes = SunCalc.getMoonTimes(selectedDate, lat, lon)
-
-    const age = moonIllumination.phase * LUNAR_CYCLE_DAYS
-    const distance = 384400 * (1 - moonIllumination.fraction * 0.05)
-
+function computeEvents(selectedDate: Date): {
+    events: MoonPhaseEvent[]
+    nextEvents: MoonPhaseEvent[]
+} {
     const events = (Object.keys(PHASE_TARGETS) as MajorPhaseKey[])
         .map((type) => ({
             type,
@@ -122,27 +120,43 @@ function computeMoonData(
     )
 
     return {
+        events,
+        nextEvents,
+    }
+}
+
+function computeMoonData(
+    selectedDate: Date,
+    lat: number,
+    lon: number,
+): Omit<MoonData, 'events' | 'nextEvents'> {
+    const moonIllumination = SunCalc.getMoonIllumination(selectedDate)
+    const moonPosition = SunCalc.getMoonPosition(selectedDate, lat, lon)
+    const moonTimes = SunCalc.getMoonTimes(selectedDate, lat, lon)
+    const equatorial = getMoonEquatorialCoords(selectedDate)
+
+    const age = moonIllumination.phase * LUNAR_CYCLE_DAYS
+
+    return {
         date: selectedDate,
         phase: moonIllumination.phase,
         phaseKey: getPhaseKey(moonIllumination.phase),
         age,
         illumination: moonIllumination.fraction,
-        distance,
+        distance: moonPosition.distance,
         moonrise: moonTimes.rise ?? null,
         moonset: moonTimes.set ?? null,
         altitude: moonPosition.altitude,
         azimuth: moonPosition.azimuth,
         parallacticAngle: moonPosition.parallacticAngle,
-        ra: moonPosition.azimuth ? (moonPosition.azimuth * 180) / 15 : null,
-        dec: moonPosition.altitude
-            ? moonPosition.altitude * (180 / Math.PI)
-            : null,
+        ra: equatorial.ra,
+        dec: equatorial.dec,
         az: (moonPosition.azimuth * 180) / Math.PI,
         alt: (moonPosition.altitude * 180) / Math.PI,
-        events,
-        nextEvents,
     }
 }
+
+const DAY_MS = 24 * 60 * 60 * 1000
 
 export function useMoonData(lat: number, lon: number, date?: string): MoonData {
     const [currentDate, setCurrentDate] = useState(() =>
@@ -156,14 +170,25 @@ export function useMoonData(lat: number, lon: number, date?: string): MoonData {
         }
     }, [date])
 
-    const [moonData, setMoonData] = useState(() =>
-        computeMoonData(date ? new Date(date) : currentDate, lat, lon),
+    const selectedDate = date ? new Date(date) : currentDate
+    const selectedTime = selectedDate.getTime()
+    // findNextMoonPhase only resolves to day-granularity, so re-running it every second in
+    // live mode (once per computeMoonData call) would be pure wasted work — bucket by day.
+    const dayKey = Math.floor(selectedTime / DAY_MS)
+
+    const moonData = useMemo(
+        () => computeMoonData(selectedDate, lat, lon),
+        [selectedTime, lat, lon],
     )
 
-    useEffect(() => {
-        const selectedDate = date ? new Date(date) : currentDate
-        setMoonData(computeMoonData(selectedDate, lat, lon))
-    }, [lat, lon, date, currentDate])
+    const { events, nextEvents } = useMemo(
+        () => computeEvents(selectedDate),
+        [dayKey],
+    )
 
-    return moonData
+    return {
+        ...moonData,
+        events,
+        nextEvents,
+    }
 }

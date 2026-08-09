@@ -4,8 +4,26 @@ import { useEffect, useRef, useState } from 'react'
 
 import { CheckIcon, CopyIcon } from './Icons'
 
+// Fallback for HTTP origins / older browsers where navigator.clipboard is unavailable.
+function copyWithFallback(text: string): boolean {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    let succeeded = false
+    try {
+        succeeded = document.execCommand('copy')
+    } catch {
+        succeeded = false
+    }
+    document.body.removeChild(textarea)
+    return succeeded
+}
+
 export default function CopyButton({ text }: { text: string }) {
-    const [copied, setCopied] = useState(false)
+    const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle')
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     useEffect(() => {
@@ -17,13 +35,20 @@ export default function CopyButton({ text }: { text: string }) {
     }, [])
 
     const handleCopy = async () => {
+        let succeeded = false
         try {
-            await navigator.clipboard.writeText(text)
-            setCopied(true)
-            timeoutRef.current = setTimeout(() => setCopied(false), 1600)
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text)
+                succeeded = true
+            } else {
+                succeeded = copyWithFallback(text)
+            }
         } catch {
-            // clipboard API unavailable — nothing to fall back to
+            succeeded = copyWithFallback(text)
         }
+
+        setStatus(succeeded ? 'copied' : 'error')
+        timeoutRef.current = setTimeout(() => setStatus('idle'), 1600)
     }
 
     return (
@@ -31,9 +56,15 @@ export default function CopyButton({ text }: { text: string }) {
             type="button"
             className="lw-copy-btn"
             onClick={handleCopy}
-            aria-label="Copy to clipboard"
+            aria-label={
+                status === 'error' ? 'Copy failed' : 'Copy to clipboard'
+            }
         >
-            {copied ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
+            {status === 'copied' ? (
+                <CheckIcon size={15} />
+            ) : (
+                <CopyIcon size={15} />
+            )}
         </button>
     )
 }

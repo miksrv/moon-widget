@@ -1,10 +1,9 @@
 import type { MetadataRoute } from 'next'
 
+import { SITE_URL } from '../config'
+
 // required for static `output: 'export'` builds
 export const dynamic = 'force-static'
-
-// TODO: replace with the real production domain once it's known
-const SITE_URL = 'https://moon-widget.example.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     return [

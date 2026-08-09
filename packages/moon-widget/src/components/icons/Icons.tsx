@@ -14,6 +14,8 @@ const base = (size = 16) => ({
     strokeWidth: 1.75,
     strokeLinecap: 'round' as const,
     strokeLinejoin: 'round' as const,
+    'aria-hidden': 'true' as const,
+    focusable: 'false' as const,
 })
 
 export const MenuIcon: React.FC<IconProps> = ({ className, size }) => (
@@ -104,14 +106,4 @@ export const ChevronRightIcon: React.FC<IconProps> = ({ className, size }) => (
     <svg className={className} {...base(size)}>
         <path d="M9 5l7 7-7 7" />
     </svg>
-)
-
-export const LivePulseIcon: React.FC<IconProps> = ({ className, size = 8 }) => (
-    <span
-        className={className}
-        style={{
-            width: size,
-            height: size,
-        }}
-    />
 )

@@ -28,7 +28,7 @@ const LiveWidget: React.FC<LiveWidgetProps> = ({
             className={`moon-widget moon-widget--live${themeClassName(theme)}`}
         >
             <div className="moon-widget__header">
-                <span>{t.moon}</span>
+                <span className="moon-widget__moon-pill">{t.moon}</span>
                 <span
                     className={`moon-widget__live${isLive ? ' moon-widget__live--active' : ''}`}
                 >
@@ -84,11 +84,7 @@ const LiveWidget: React.FC<LiveWidgetProps> = ({
                     layout="icon-inline"
                     icon={<GlobeIcon size={16} />}
                     label={t.raDec}
-                    value={
-                        data.ra != null && data.dec != null
-                            ? `${toHMS(data.ra)} ${toDMS(data.dec)}`
-                            : 'Unknown'
-                    }
+                    value={`${toHMS(data.ra)} ${toDMS(data.dec)}`}
                 />
                 <StatItem
                     layout="icon-inline"
