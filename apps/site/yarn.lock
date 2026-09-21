@@ -3206,12 +3206,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.13.10":
-  version: 22.20.1
-  resolution: "@types/node@npm:22.20.1"
+"@types/node@npm:^22.20.4":
+  version: 22.20.4
+  resolution: "@types/node@npm:22.20.4"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/f2ba54d3d1fb92e1c57c78d32c3a17655b1e87363b707136f55c422b4838d4054901ce5d27f75bb0e5ecb7ebfee3804e0987822d22b473473008091857a09353
+  checksum: 10c0/3a17e19f7b7b7a6d6c695ef8b0a34b70f84829a1539f57d338487bc3b51ddd4ca86ffbcbcc4f1307a41de83d02c1b7dfbb16e8cb6a9c3a8360b4306ccf9ead2d
   languageName: node
   linkType: hard
 
@@ -12587,7 +12587,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "site@workspace:."
   dependencies:
-    "@types/node": "npm:^22.13.10"
+    "@types/node": "npm:^22.20.4"
     "@types/react": "npm:^19.0.12"
     "@types/react-dom": "npm:^19.0.4"
     eslint: "npm:^9.25.1"
